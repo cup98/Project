@@ -19,7 +19,7 @@ void CAN1_Init(CAN_BPSConfigType *Config)
 	{
 	}
 
-	while (CAN1CTL1_INITAK == 0 && i1 < 5)							//等待进入初始化状态
+	while (CAN1CTL1_INITAK == 0 && i1 < 5)					//等待进入初始化状态
 	{
 		i1++;
 	}
@@ -49,11 +49,11 @@ void CAN1_Init(CAN_BPSConfigType *Config)
 	CAN1CTL1  = 0xC0;										//使能MSCAN模块,设置为一般运行模式、使用总线时钟源
 	CAN1CTL0  = 0x00;										//返回一般模式运行
 
-	while (CAN1CTL1_INITAK && i2 < 5)						  			//等待回到一般运行模式
+	while (CAN1CTL1_INITAK && i2 < 5)						//等待回到一般运行模式
 	{
 		i2++;
 	}
-	while (CAN1CTL0_SYNCH == 0 && i3 < 5) 							//等待总线时钟同步
+	while (CAN1CTL0_SYNCH == 0 && i3 < 5) 				    //等待总线时钟同步
 	{
 		i3++;
 	}
