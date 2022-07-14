@@ -20,7 +20,7 @@ typedef enum _CAN_BpsType							//CAN波特率选择
 
 typedef struct _CAN_MsgType							//构造CAN通信报文结构
 {
-	unsigned int ID;					//仲裁帧id
+	unsigned long ID;					//仲裁帧id
 	int IDE;							//IDE:0标准帧,1扩展帧
 	int RTR;							//RTR:0数据帧,1远程帧
 	unsigned char Data[CAN_MSG_MAXLEN];	//数据位
@@ -38,7 +38,7 @@ typedef struct _CAN_BpsConfigType					//选择CAN波特率
 static CAN_BpsConfigType CAN_HwCfgType =			//设置波特率
 {
 	CAN_BPS_125K,
-	1
+	1,
 };
 
 static CAN_MsgType CAN_Msg1Type =					//设置CAN标准帧
@@ -53,8 +53,8 @@ static CAN_MsgType CAN_Msg1Type =					//设置CAN标准帧
 
 static CAN_MsgType CAN_Msg2Type =
 {
-	0x02,
-	0,
+	0x00FFF,
+	1,
 	0,
 	{2,2,2,2,2,2,2,2},
 	8,
@@ -85,9 +85,9 @@ CAN_MsgType CAN_MsgType_CAN1_GetBufType;		//声明CAN1接收缓存
 
 extern void CAN_Init(void);
 extern void CAN1_Init(CAN_BpsConfigType *cfg);
-extern int CAN1_SendMsg(CAN_MsgType *msg);
+extern int CAN1_SendMsg(CAN_MsgType *CAN_Msg);
 extern void CAN1_MsgData(void);
-extern int CAN1_GetMsg(CAN_MsgType *msg);
+extern int CAN1_GetMsg(CAN_MsgType *CAN_Msg);
 extern void CAN1_GetToOut(void);
 extern void Delay10ms(unsigned int i);
 //extern void CAN1_MsgCPLT(void);
