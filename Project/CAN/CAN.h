@@ -8,29 +8,37 @@
 
 typedef enum _CAN_BpsType							//CAN波特率选择
 {
+	CAN_BPS_20K,							  		//波特率设置为250K
+	CAN_BPS_50K,
+	CAN_BPS_100K,
 	CAN_BPS_125K,									//波特率设置为125K
-	CAN_BPS_250K							  		//波特率设置为250K
+	CAN_BPS_250K,							  		//波特率设置为250K
+	CAN_BPS_500K,							  		//波特率设置为250K
+	CAN_BPS_800K,
+	CAN_BPS_1000K						  			//波特率设置为250K
 } CAN_BpsType;
 
 typedef struct _CAN_MsgType							//构造CAN通信报文结构
 {
-	unsigned int  CAN_MsgType_ID;					//仲裁帧id
-	int CAN_MsgType_IDE;							//IDE:0标准帧,1扩展帧
-	int CAN_MsgType_RTR;							//RTR:0数据帧,1远程帧
-	unsigned char CAN_MsgType_Data[CAN_MSG_MAXLEN];	//数据位
-	unsigned char CAN_MsgType_Len;					//数据长度
-	unsigned char CAN_MsgType_Prty;
+	unsigned int ID;					//仲裁帧id
+	int IDE;							//IDE:0标准帧,1扩展帧
+	int RTR;							//RTR:0数据帧,1远程帧
+	unsigned char Data[CAN_MSG_MAXLEN];	//数据位
+	unsigned char Len;					//数据长度
+	unsigned char Prty;
 } CAN_MsgType;
 
 typedef struct _CAN_BpsConfigType					//选择CAN波特率
 {
-	CAN_BpsType CAN_BpsConfigType_Bps;
+	CAN_BpsType Bps;
+	unsigned char sp;
 } CAN_BpsConfigType;
 
 
 static CAN_BpsConfigType CAN_HwCfgType =			//设置波特率
 {
 	CAN_BPS_125K,
+	1
 };
 
 static CAN_MsgType CAN_Msg1Type =					//设置CAN标准帧

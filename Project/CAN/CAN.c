@@ -15,9 +15,6 @@ void CAN1_Init(CAN_BpsConfigType *Config)
 	{
 		CAN1CTL0_INITRQ = 1;								//进入初始化状态
 	}
-	else
-	{
-	}
 
 	while (CAN1CTL1_INITAK == 0 && Wait1 < 5)				//等待进入初始化状态
 	{
@@ -25,18 +22,60 @@ void CAN1_Init(CAN_BpsConfigType *Config)
 	}
 
 	CAN1BTR0_SJW = 0;										//设置同步
-
-	if (Config->CAN_BpsConfigType_Bps == CAN_BPS_125K)		//配置波特率为125KHz
-	{														//OSC=8MHz;Bps=8MHz/BRP/(1+TSEG1+TSEG2)
-		CAN1BTR0_BRP = 0x0E;								//设置波特率预定值
-		CAN1BTR1 |= 0x1D;			  						//设置TSEG1和TSEG2时间段
-	}
-	else if (Config->CAN_BpsConfigType_Bps == CAN_BPS_250K)  //配置波特率为250KHz
+	
+	if (Config->sp == 1)	//����
 	{
+		CAN0BTR1_SAMP = 0;
+	}
+	else
+	{
+		CAN0BTR1_SAMP = 1;
+	}
+
+	if (Config->Bps == CAN_BPS_20K)  //配置波特率为250KHz
+	{
+		CAN1BTR0_BRP = 0x3F;
+		CAN1BTR1 |= 0x7F;
+	}
+	else if (Config->Bps == CAN_BPS_50K)  //配置波特率为250KHz
+	{
+		CAN1BTR0_BRP = 0x1C;
+		CAN1BTR1 |= 0x4F;
+	}
+	else if (Config->Bps == CAN_BPS_100K)  //配置波特率为250KHz
+	{
+		CAN1BTR0_BRP = 0x0F;
+		CAN1BTR1 |= 0x2F;
+	}
+	else if (Config->Bps == CAN_BPS_125K)  //配置波特率为250KHz
+	{
+		CAN1BTR0_BRP = 0x0E;
+		CAN1BTR1 |= 0x1D;
+	}
+	else if (Config->Bps == CAN_BPS_250K)  //配置波特率为250KHz
+	{
+		CAN1BTR0_BRP = 0x07;
+		CAN1BTR1 |= 0x1C;
+	}
+	else if (Config->Bps == CAN_BPS_500K)  //配置波特率为250KHz
+	{
+		CAN1BTR0_BRP = 0x03;
+		CAN1BTR1 |= 0x1C;
+	}
+	else if (Config->Bps == CAN_BPS_800K)  //配置波特率为250KHz
+	{
+		CAN1BTR0_BRP = 0x01;
+		CAN1BTR1 |= 0x2F;
+	}
+	else if (Config->Bps == CAN_BPS_1000K)  //配置波特率为250KHz
+	{
+		CAN1BTR0_BRP = 0x01;
+		CAN1BTR1 |= 0x1C;
 	}
 	else
 	{
 	}
+
 
 	CAN1IDMR0 = 0xFF;										//关闭滤波器
 	CAN1IDMR1 = 0xFF;
@@ -67,7 +106,7 @@ int CAN1_SendMsg(CAN_MsgType *msg)
 	unsigned char send_buf, sp ;							//设置发送缓冲区、发送数据位数
   	int Reflag;
 
-	if (msg->CAN_MsgType_Len > CAN_MSG_MAXLEN)				//检查数据长度
+	if (msg->Len > CAN_MSG_MAXLEN)				//检查数据长度
 	{
 		Reflag = 0;
 	}
@@ -89,10 +128,10 @@ int CAN1_SendMsg(CAN_MsgType *msg)
 		send_buf  = CAN1TBSEL;
 	} while (!(send_buf));									//寻找空闲的缓冲器
 
-	CAN1TXIDR0 = (unsigned char)(msg->CAN_MsgType_ID >> 3);	//写入帧ID前8位
-	CAN1TXIDR1 = (unsigned char)(msg->CAN_MsgType_ID << 5);	//写入帧ID后3位
+	CAN1TXIDR0 = (unsigned char)(msg->ID >> 3);	//写入帧ID前8位
+	CAN1TXIDR1 = (unsigned char)(msg->ID << 5);	//写入帧ID后3位
 
-	if (msg->CAN_MsgType_IDE)								//判断IDE：0标准帧,1远程帧
+	if (msg->IDE)								//判断IDE：0标准帧,1远程帧
 	{
 		CAN1TXIDR1 |= 0x10;
 	}
@@ -100,13 +139,13 @@ int CAN1_SendMsg(CAN_MsgType *msg)
 	{
 	}
 
-	for (sp = 0 ; sp < msg->CAN_MsgType_Len ; sp++)			//依次将数据写入寄存器
+	for (sp = 0 ; sp < msg->Len ; sp++)			//依次将数据写入寄存器
 	{
-		*((&CAN1TXDSR0) + sp) = msg->CAN_MsgType_Data[sp];
+		*((&CAN1TXDSR0) + sp) = msg->Data[sp];
 	}
 
-	CAN1TXDLR  = msg->CAN_MsgType_Len;						//写入数据长度
-	CAN1TXTBPR = msg->CAN_MsgType_Prty;						//写入优先级
+	CAN1TXDLR  = msg->Len;						//写入数据长度
+	CAN1TXTBPR = msg->Prty;						//写入优先级
 	CAN1TFLG   = send_buf;									//清TXx标志(缓冲器准备发送)
 
 	Reflag = 1;
@@ -165,29 +204,29 @@ int CAN1_GetMsg(CAN_MsgType *msg)
 
   	if (CAN1RXIDR1 & 0x10)                         			  //判断是否为标准帧
   	{
-  	  	msg->CAN_MsgType_IDE = 1;
+  	  	msg->IDE = 1;
   	}
   	else
   	{
-  	  	msg->CAN_MsgType_IDE = 0;
-  	  	msg->CAN_MsgType_ID  = (unsigned char)(CAN1RXIDR0 << 3) | //读出接收帧ID前8位
+  	  	msg->IDE = 0;
+  	  	msg->ID  = (unsigned char)(CAN1RXIDR0 << 3) | //读出接收帧ID前8位
             	  			   (unsigned char)(CAN1RXIDR1 >> 5) ; //并且与上读出接收帧ID后3位
  	}
 
  	if (CAN1RXIDR1 & 0x08)                         			  //判断是否为远程帧
   	{
-  	  	msg->CAN_MsgType_RTR = 1;
+  	  	msg->RTR = 1;
   	}
   	else
   	{
-  	  	msg->CAN_MsgType_RTR = 0;
+  	  	msg->RTR = 0;
  	}
 
-  	msg->CAN_MsgType_Len = CAN1RXDLR;						  //读出接收的数据长度
+  	msg->Len = CAN1RXDLR;						  //读出接收的数据长度
 
-  	for (sp = 0; sp < msg->CAN_MsgType_Len; sp++)			  //依次读出接收的每一位数据
+  	for (sp = 0; sp < msg->Len; sp++)			  //依次读出接收的每一位数据
   	{
-  		msg->CAN_MsgType_Data[sp] = *((&CAN1RXDSR0) + sp);
+  		msg->Data[sp] = *((&CAN1RXDSR0) + sp);
   	}
 
   	CAN1RFLG |= 1;											  //清RXF标志位(缓冲器准备接收)
@@ -200,7 +239,7 @@ void CAN1_GetToOut(void)									  //读出接受到的数据再发送出来
 {
   	if (CAN1_GetMsg(&CAN_MsgType_CAN1_GetBufType) == 1)
   	{
-    	if (!(CAN_MsgType_CAN1_GetBufType.CAN_MsgType_IDE))
+    	if (!(CAN_MsgType_CAN1_GetBufType.IDE))
     	{
       		CAN1_SendMsg(&CAN_MsgType_CAN1_GetBufType);
     	}
