@@ -1567,9 +1567,9 @@ MODULE:                 -- CAN.c.o --
      CAN_Init                                FE8052       8       8       2   .text       
      CAN1_Init                               FE805A      E7     231       3   .text       
      CAN1_SendMsg                            FE8141      C9     201       8   .text       
-     CAN1_MsgData                            FE820A      2F      47       2   .text       
-     CAN1_GetMsg                             FE8239      CE     206       4   .text       
-     CAN1_GetToOut                           FE8307      12      18       2   .text       
+     CAN1_GetMsg                             FE820A      CE     206       4   .text       
+     CAN1_SendDemo                           FE82D8      2F      47       2   .text       
+     CAN1_GetToSend                          FE8307      12      18       2   .text       
      CAN_receive                               C080       5       5       1   NON_BANKED  
 - VARIABLES:
      CAN_HwCfgType                             2100       3       3       1   .data       
@@ -1578,7 +1578,7 @@ MODULE:                 -- CAN.c.o --
      CAN_Msg3Type                              2127      12      18       1   .data       
      CAN_Time                                  2139       2       2       3   .bss        
      _Vector_42                                FFAA       2       2       0   .abs_section_ffaa
-     CAN_MsgType_CAN1_GetBufType               213B      12      18       2   .common     
+     CAN1_GetBufType                           213B      12      18       2   .common     
 MODULE:                 -- ECT.c.o --
 - PROCEDURES:
      ECT_Init                                FE8319      24      36       2   .text       
@@ -1615,8 +1615,8 @@ MODULE STATISTIC
 SECTION USE IN OBJECT-ALLOCATION SECTION
 ---------------------------------------------------------------------------------------------
 SECTION: ".text"
-  main Init CAN_Init CAN1_Init CAN1_SendMsg CAN1_MsgData CAN1_GetMsg 
-  CAN1_GetToOut ECT_Init PIT_Init PIT0_Init PLL_Init 
+  main Init CAN_Init CAN1_Init CAN1_SendMsg CAN1_GetMsg CAN1_SendDemo 
+  CAN1_GetToSend ECT_Init PIT_Init PIT0_Init PLL_Init 
 SECTION: ".data"
   CAN_HwCfgType CAN_Msg1Type CAN_Msg2Type CAN_Msg3Type 
 SECTION: ".bss"
@@ -3102,7 +3102,7 @@ SECTION: ".abs_section_3ee"
 SECTION: ".abs_section_3f2"
   _TIM_PACNT 
 SECTION: ".common"
-  CAN_MsgType_CAN1_GetBufType 
+  CAN1_GetBufType 
 SECTION: ".abs_section_ffaa"
   _Vector_42 
 SECTION: ".abs_section_ff7a"
@@ -3857,7 +3857,7 @@ OBJECT LIST SORTED BY ADDRESS
      CAN_Msg2Type                              2115      12      18       1   .data       
      CAN_Msg3Type                              2127      12      18       1   .data       
      CAN_Time                                  2139       2       2       3   .bss        
-     CAN_MsgType_CAN1_GetBufType               213B      12      18       2   .common     
+     CAN1_GetBufType                           213B      12      18       2   .common     
      _Startup                                  C000       F      15       0   .init       
      _LSHL                                     C051       D      13       2   NON_BANKED  
      _LSHRU                                    C05E       E      14       4   NON_BANKED  
@@ -3873,9 +3873,9 @@ OBJECT LIST SORTED BY ADDRESS
      CAN_Init                                FE8052       8       8       2   .text       
      CAN1_Init                               FE805A      E7     231       3   .text       
      CAN1_SendMsg                            FE8141      C9     201       8   .text       
-     CAN1_MsgData                            FE820A      2F      47       2   .text       
-     CAN1_GetMsg                             FE8239      CE     206       4   .text       
-     CAN1_GetToOut                           FE8307      12      18       2   .text       
+     CAN1_GetMsg                             FE820A      CE     206       4   .text       
+     CAN1_SendDemo                           FE82D8      2F      47       2   .text       
+     CAN1_GetToSend                          FE8307      12      18       2   .text       
      ECT_Init                                FE8319      24      36       2   .text       
      PIT_Init                                FE833D       5       5       2   .text       
      PIT0_Init                               FE8342      1F      31       2   .text       
@@ -3893,14 +3893,12 @@ rtshc12.c.o (ansixbf.lib):
   _CASE_SEARCH_BYTE _CASE_SEARCH_8 _CASE_SEARCH_8_BYTE _FCALL _FPCMP _PADD 
   _PSUB _PINC _PDEC 
 CAN.c.o:
-  Delay10ms 
+  CAN_Delay10ms 
 PIT.c.o:
   PIT1_Init 
 NOT USED VARIABLES
 rtshc12.c.o (ansixbf.lib):
   _PowOfTwo_8 _PowOfTwo_16 _PowOfTwo_32 errno 
-CAN.c.o:
-  CPITType 
 
 *********************************************************************************************
 COPYDOWN SECTION
@@ -3932,15 +3930,9 @@ Name of initialized Object : CAN_Msg2Type:2
 ------- ROM-ADDRESS: 0xC0B8 ---- SIZE       4 ---
 Filling bytes inserted
  00000000
-------- ROM-ADDRESS: 0xC0BC ---- RAM-ADDRESS: 0x212A ---- SIZE       1 ---
+------- ROM-ADDRESS: 0xC0BC ---- RAM-ADDRESS: 0x212A ---- SIZE      14 ---
 Name of initialized Object : CAN_Msg3Type:3
- 03
-------- ROM-ADDRESS: 0xC0BD ---- SIZE       4 ---
-Filling bytes inserted
- 00000000
-------- ROM-ADDRESS: 0xC0C1 ---- RAM-ADDRESS: 0x212F ---- SIZE       9 ---
-Name of initialized Object : CAN_Msg3Type:8
- 0303030303 03030308
+ 0300000001 0303030303 03030308
 ------- ROM-ADDRESS: 0xC0CA ---- SIZE       2 ---
 Filling bytes inserted
  0000
@@ -3949,8 +3941,8 @@ Filling bytes inserted
 OBJECT-DEPENDENCIES SECTION
 ---------------------------------------------------------------------------------------------
 _Startup                  USES __SEG_END_SSTACK Init main 
-CAN_receive               USES CAN1_GetToOut 
-PIT0                      USES _PITTF CAN1_MsgData 
+CAN_receive               USES CAN1_GetToSend 
+PIT0                      USES _PITTF CAN1_SendDemo 
 _Vector_67                USES PIT1 
 _Vector_66                USES PIT0 
 _Vector_42                USES CAN_receive 
@@ -3965,12 +3957,11 @@ CAN1_Init                 USES _CAN1CTL0 _CAN1CTL1 _CAN1BTR0 _CAN0BTR1
 CAN1_SendMsg              USES _CAN1TFLG _CAN1TBSEL _CAN1TXIDR0 CAN1_SendMsg 
                                 _LSHRU _CAN1TXIDR1 _CAN1TXIDR2 _CAN1TXIDR3 
                                 _CAN1TXDSR0 _CAN1TXDLR _CAN1TXTBPR 
-CAN1_MsgData              USES CAN_Time CAN_Msg1Type CAN_Msg2Type CAN1_SendMsg 
-                                CAN_Msg3Type 
 CAN1_GetMsg               USES _CAN1RXIDR1 _CAN1RXIDR0 _LSHL CAN1_GetMsg 
                                 _CAN1RXIDR2 _CAN1RXIDR3 _CAN1RXDLR _CAN1RXDSR0 _CAN1RFLG 
-CAN1_GetToOut             USES CAN_MsgType_CAN1_GetBufType CAN1_GetMsg 
-                                CAN1_SendMsg 
+CAN1_SendDemo             USES CAN_Time CAN_Msg1Type CAN_Msg2Type CAN1_SendMsg 
+                                CAN_Msg3Type 
+CAN1_GetToSend            USES CAN1_GetBufType CAN1_GetMsg CAN1_SendMsg 
 ECT_Init                  USES _ECT_TSCR1 _ECT_TIOS _ECT_TCTL1 _ECT_TCTL2 
                                 _ECT_DLYCT _ECT_ICOVW _ECT_ICSYS _ECT_TIE _ECT_TSCR2 
                                 _ECT_TFLG1 _ECT_TFLG2 
@@ -4010,7 +4001,7 @@ DEPENDENCY TREE
  | 
  +- CAN_receive         
     | 
-    +- CAN1_GetToOut       
+    +- CAN1_GetToSend      
        | 
        +- CAN1_GetMsg         
        |  | 
@@ -4024,7 +4015,7 @@ DEPENDENCY TREE
  | 
  +- PIT0                
     | 
-    +- CAN1_MsgData        
+    +- CAN1_SendDemo       
        | 
        +- CAN1_SendMsg         (see above)
           

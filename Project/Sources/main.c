@@ -1,5 +1,9 @@
 #include <hidef.h>
 #include "derivative.h"
+#include "CAN.h"
+#include "ECT.h"
+#include "PIT.h"
+#include "PLL.h"
 
 #define MODE_ONE      PORTC_PC4
 #define MODE_ONE_DIR  DDRC_DDRC4

@@ -1,6 +1,43 @@
 #include "CAN.h"
 
 int CAN_Time = 0;
+CAN_MsgType CAN1_GetBufType;		//声明CAN1接收缓存
+
+static CAN_ConfigType CAN_HwCfgType =			//设置波特率
+{
+	CAN_BPS_125K,
+	1,
+};
+
+static CAN_MsgType CAN_Msg1Type =					//设置CAN标准帧
+{
+	0x01,
+	0,
+	0,
+	{1,1,1,1,1,1,1,1},
+	8,
+	0,
+};
+
+static CAN_MsgType CAN_Msg2Type =
+{
+	0x00FFF,
+	1,
+	0,
+	{2,2,2,2,2,2,2,2},
+	8,
+	0,
+};
+
+static CAN_MsgType CAN_Msg3Type =
+{
+	0x03,
+	0,
+	1,
+	{3,3,3,3,3,3,3,3},
+	8,
+	0,
+};
 
 void CAN_Init(void)											//CAN初始�
 {
@@ -8,7 +45,7 @@ void CAN_Init(void)											//CAN初始�
 }
 
 //CAN1初始化以及配置CLK
-void CAN1_Init(CAN_BpsConfigType *Config)
+void CAN1_Init(CAN_ConfigType *CAN_Cfg)
 {
 	int Wait1 = 0,Wait2 = 0,Wait3 = 0;
 	if (CAN1CTL0_INITRQ == 0) 								//查询是否进入初始化状�
@@ -23,7 +60,7 @@ void CAN1_Init(CAN_BpsConfigType *Config)
 
 	CAN1BTR0_SJW = 0;										//设置同步
 
-	if (Config->sp == 1)	//����
+	if (CAN_Cfg->sp == 1)	//����
 	{
 		CAN0BTR1_SAMP = 0;
 	}
@@ -32,7 +69,7 @@ void CAN1_Init(CAN_BpsConfigType *Config)
 		CAN0BTR1_SAMP = 1;
 	}
 
-	switch (Config->Bps)
+	switch (CAN_Cfg->Bps)
 	{
 		case CAN_BPS_20K:
 		{
@@ -172,35 +209,8 @@ int CAN1_SendMsg(CAN_MsgType *CAN_Msg)
 
 	Reflag = 1;
 	return Reflag;
+	
 }
-
-//CAN1切换发�数�
-void CAN1_MsgData(void)
-{
-	CAN_Time++;
-
-  	if (CAN_Time == 1)
-  	{
-  	  	CAN1_SendMsg(&CAN_Msg1Type);
-  	}
-  	else if (CAN_Time == 2)
-  	{
-  	  	CAN1_SendMsg(&CAN_Msg2Type);
-  	}
- 	else if (CAN_Time == 3)
-  	{
-    	CAN1_SendMsg(&CAN_Msg3Type);
-    	CAN_Time = 0;
-  	}
-	else
-	{
-	}
-}
-
-/*void CAN1_MsgCPLT(void)
-{
-  	CAN1_SendMsg(CPIT);
-}*/
 
 //CAN1接收
 int CAN1_GetMsg(CAN_MsgType *CAN_Msg)
@@ -215,11 +225,6 @@ int CAN1_GetMsg(CAN_MsgType *CAN_Msg)
 
   	if ((CAN1RXIDR1 & 0x08) == 0x08)                         			  //判断是否为标准帧
   	{
-//  	  	CAN_Msg->ID = ((unsigned char)(CAN1RXIDR0 << 21) | //读出接收帧ID�8�
-//            	  	   ((unsigned char)(CAN1RXIDR1 << 13) & 0xE0) | //并且与上读出接收帧ID�3�
-//            	  	   ((unsigned char)(CAN1RXIDR1 << 15) & 0x07) |
-//            	  	   ((unsigned char)(CAN1RXIDR2 << 7)) |
-//            	  	   ((unsigned char)(CAN1RXIDR3 <<  1) & 0xFE)) ;
         CAN_Msg->ID = ((unsigned long)(CAN1RXIDR0 & 0xff)) << 21;
   	    CAN_Msg->ID = CAN_Msg->ID | (((unsigned long)(CAN1RXIDR1 & 0xe0)) << 13);
 	      CAN_Msg->ID = CAN_Msg->ID | (((unsigned long)(CAN1RXIDR1 & 0x07)) << 15);
@@ -264,15 +269,46 @@ int CAN1_GetMsg(CAN_MsgType *CAN_Msg)
   	return Reflag;
 }
 
-void CAN1_GetToOut(void)									  //读出接受到的数据再发送出�
+//CAN1切换发�数�
+void CAN1_SendDemo(void)
 {
-  	if (CAN1_GetMsg(&CAN_MsgType_CAN1_GetBufType) == 1)
+	CAN_Time++;
+
+  	if (CAN_Time == 1)
   	{
-      	CAN1_SendMsg(&CAN_MsgType_CAN1_GetBufType);
+  	  	if(CAN1_SendMsg(&CAN_Msg1Type) == 1) 
+  	  	{
+  	  	}
+  	}
+  	else if (CAN_Time == 2)
+  	{
+  	  	if(CAN1_SendMsg(&CAN_Msg2Type) == 1) 
+  	  	{
+  	  	}
+  	}
+ 	else if (CAN_Time == 3)
+  	{
+    	if(CAN1_SendMsg(&CAN_Msg3Type) == 1)
+    	{
+    	}
+    	CAN_Time = 0;
+  	}
+	else
+	{
+	}
+}
+
+void CAN1_GetToSend(void)									  //读出接受到的数据再发送出�
+{
+  	if (CAN1_GetMsg(&CAN1_GetBufType) == 1)
+  	{
+      	if(CAN1_SendMsg(&CAN1_GetBufType) == 1)
+      	{
+      	}
   	}
 }
 
-void Delay10ms(unsigned int i)								  //延时
+void CAN_Delay10ms(unsigned int i)								  //延时
 {
     unsigned int n,m;
     for (n=0; n<250; n++)
@@ -287,7 +323,8 @@ void Delay10ms(unsigned int i)								  //延时
 #pragma CODE_SEG __NEAR_SEG NON_BANKED
 void interrupt VectorNumber_Vcan1rx CAN_receive(void)
 {
-    CAN1_GetToOut();
+    CAN1_GetToSend();
 }
 #pragma CODE_SEG DEFAULT
+
 

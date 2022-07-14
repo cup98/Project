@@ -4,9 +4,9 @@
 #include "hidef.h"
 #include "derivative.h"
 
-extern void PIT_Init(void);
-extern int PIT0_Init(void);
-extern int PIT1_Init(void);
+void PIT_Init(void);
+void PIT0_Init(void);
+void PIT1_Init(void);
 
 
 #endif

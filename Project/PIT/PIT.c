@@ -1,4 +1,5 @@
 #include "PIT.h"
+#include "CAN.h"
 
 void PIT_Init(void)
 {
@@ -6,7 +7,7 @@ void PIT_Init(void)
 //	PIT1_Init();
 }
 
-int PIT0_Init(void)							//初始化PIT，利用8位基准0和16位定时器0通道
+void PIT0_Init(void)							//初始化PIT，利用8位基准0和16位定时器0通道
 {
 	PITCFLMT_PITE = 0;							//关闭PIT PITTF标志位清零
 	PITCE_PCE0 = 1;								//开启16位定时器0通道
@@ -17,7 +18,7 @@ int PIT0_Init(void)							//初始化PIT，利用8位基准0和16位定时器0�
 	PITCFLMT_PITE = 1;
 }
 
-int PIT1_Init(void)							//初始化PIT，利用8位基准0和16位定时器0通道
+void PIT1_Init(void)							//初始化PIT，利用8位基准0和16位定时器0通道
 {
 	PITCFLMT_PITE = 0;							//关闭PIT PITTF标志位清零
 	PITCE_PCE1 = 1;								//开启16位定时器1通道
@@ -32,8 +33,8 @@ int PIT1_Init(void)							//初始化PIT，利用8位基准0和16位定时器0�
 void interrupt VectorNumber_Vpit0 PIT0(void)	//中断服务函数
 {
     PITTF_PTF0 = 1;
-    CAN1_MsgData();							//PIT0中断
-    //CAN1_GetToOut();
+    CAN1_SendDemo();							//PIT0中断
+    //CAN1_GetToSend();
 }
 
 #pragma CODE_SEG DEFAULT
@@ -44,7 +45,6 @@ void interrupt VectorNumber_Vpit1 PIT1(void)	//中断服务函数
 {
     //PITTF_PTF1 = 1;
     //Time_Flag();								//PIT1中断
-    //CAN1_MsgCPLT();
 }
 
 #pragma CODE_SEG DEFAULT
