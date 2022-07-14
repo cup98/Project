@@ -39,7 +39,7 @@ Section Name                    Size  Type     From       To       Segment
 .startData                        66     R     0xC00F     0xC050   ROM_C000
 NON_BANKED                        15     R     0xC051     0xC05F   ROM_C000
 .copy                             52     R     0xC060     0xC093   ROM_C000
-.text                            548     R   0xFE8000   0xFE8223   PAGE_FE
+.text                            594     R   0xFE8000   0xFE8251   PAGE_FE
 .stack                           256   R/W     0x2000     0x20FF   RAM
 .data                             48   R/W     0x2100     0x212F   RAM
 .abs_section_8                     1   N/I        0x8        0x8   .absSeg0
@@ -788,7 +788,7 @@ NON_BANKED                        15     R     0xC051     0xC05F   ROM_C000
 .vectSeg741_vect                   2     R     0xFFFE     0xFFFF   .vectSeg741
 
 Summary of section sizes per section type:
-READ_ONLY (R):         2C0 (dec:      704)
+READ_ONLY (R):         2EE (dec:      750)
 READ_WRITE (R/W):      144 (dec:      324)
 NO_INIT (N/I):         383 (dec:      899)
 
@@ -1558,28 +1558,28 @@ MODULE:                 -- Start12.c.o --
 MODULE:                 -- CAN.c.o --
 - PROCEDURES:
      CAN_Init                                FE8052       8       8       2   .text       
-     CAN1_Init                               FE805A      58      88       2   .text       
-     CAN1_SendMsg                            FE80B2      5C      92       6   .text       
-     CAN1_MsgData                            FE810E      2F      47       2   .text       
-     CAN1_GetMsg                             FE813D      6B     107       2   .text       
-     CAN1_GetToOut                           FE81A8      17      23       2   .text       
+     CAN1_Init                               FE805A      86     134       2   .text       
+     CAN1_SendMsg                            FE80E0      5C      92       6   .text       
+     CAN1_MsgData                            FE813C      2F      47       2   .text       
+     CAN1_GetMsg                             FE816B      6B     107       2   .text       
+     CAN1_GetToOut                           FE81D6      17      23       2   .text       
      CAN_receive                               C051       5       5       1   NON_BANKED  
 - VARIABLES:
      CAN_Msg1Type                              2100      10      16       1   .data       
      CAN_Msg2Type                              2110      10      16       1   .data       
      CAN_Msg3Type                              2120      10      16       1   .data       
-     CAN_HwCfg_Type                            2130       2       2       1   .bss        
+     CAN_HwCfgType                             2130       2       2       1   .bss        
      CAN_Time                                  2132       2       2       3   .bss        
      _Vector_42                                FFAA       2       2       0   .abs_section_ffaa
      CAN_MsgType_CAN1_GetBufType               2134      10      16       3   .common     
 MODULE:                 -- ECT.c.o --
 - PROCEDURES:
-     ECT_Init                                FE81BF      24      36       2   .text       
+     ECT_Init                                FE81ED      24      36       2   .text       
 - VARIABLES:
 MODULE:                 -- PIT.c.o --
 - PROCEDURES:
-     PIT_Init                                FE81E3       5       5       2   .text       
-     PIT0_Init                               FE81E8      1F      31       2   .text       
+     PIT_Init                                FE8211       5       5       2   .text       
+     PIT0_Init                               FE8216      1F      31       2   .text       
      PIT0                                      C056       9       9       1   NON_BANKED  
      PIT1                                      C05F       1       1       1   NON_BANKED  
 - VARIABLES:
@@ -1587,7 +1587,7 @@ MODULE:                 -- PIT.c.o --
      _Vector_67                                FF78       2       2       0   .abs_section_ff78
 MODULE:                 -- PLL.c.o --
 - PROCEDURES:
-     PLL_Init                                FE8207      1D      29       2   .text       
+     PLL_Init                                FE8235      1D      29       2   .text       
 - VARIABLES:
 
 *********************************************************************************************
@@ -1597,7 +1597,7 @@ MODULE STATISTIC
   MC9S12XEP100.c.o                           899      0      0
   main.c.o                                     0     41      0
   Start12.c.o                                  0     56      0
-  CAN.c.o                                     68    370      2
+  CAN.c.o                                     68    416      2
   ECT.c.o                                      0     36      0
   PIT.c.o                                      0     46      4
   PLL.c.o                                      0     29      0
@@ -1612,7 +1612,7 @@ SECTION: ".text"
 SECTION: ".data"
   CAN_Msg1Type CAN_Msg2Type CAN_Msg3Type 
 SECTION: ".bss"
-  CAN_HwCfg_Type CAN_Time 
+  CAN_HwCfgType CAN_Time 
 SECTION: ".init"
   _Startup 
 SECTION: "NON_BANKED"
@@ -3847,7 +3847,7 @@ OBJECT LIST SORTED BY ADDRESS
      CAN_Msg1Type                              2100      10      16       1   .data       
      CAN_Msg2Type                              2110      10      16       1   .data       
      CAN_Msg3Type                              2120      10      16       1   .data       
-     CAN_HwCfg_Type                            2130       2       2       1   .bss        
+     CAN_HwCfgType                             2130       2       2       1   .bss        
      CAN_Time                                  2132       2       2       3   .bss        
      CAN_MsgType_CAN1_GetBufType               2134      10      16       3   .common     
      _Startup                                  C000       F      15       0   .init       
@@ -3860,15 +3860,15 @@ OBJECT LIST SORTED BY ADDRESS
      main                                    FE8000      29      41       2   .text       
      Init                                    FE8029      29      41       2   .text       
      CAN_Init                                FE8052       8       8       2   .text       
-     CAN1_Init                               FE805A      58      88       2   .text       
-     CAN1_SendMsg                            FE80B2      5C      92       6   .text       
-     CAN1_MsgData                            FE810E      2F      47       2   .text       
-     CAN1_GetMsg                             FE813D      6B     107       2   .text       
-     CAN1_GetToOut                           FE81A8      17      23       2   .text       
-     ECT_Init                                FE81BF      24      36       2   .text       
-     PIT_Init                                FE81E3       5       5       2   .text       
-     PIT0_Init                               FE81E8      1F      31       2   .text       
-     PLL_Init                                FE8207      1D      29       2   .text       
+     CAN1_Init                               FE805A      86     134       2   .text       
+     CAN1_SendMsg                            FE80E0      5C      92       6   .text       
+     CAN1_MsgData                            FE813C      2F      47       2   .text       
+     CAN1_GetMsg                             FE816B      6B     107       2   .text       
+     CAN1_GetToOut                           FE81D6      17      23       2   .text       
+     ECT_Init                                FE81ED      24      36       2   .text       
+     PIT_Init                                FE8211       5       5       2   .text       
+     PIT0_Init                               FE8216      1F      31       2   .text       
+     PLL_Init                                FE8235      1D      29       2   .text       
 
 *********************************************************************************************
 UNUSED-OBJECTS SECTION
@@ -3937,7 +3937,7 @@ _Vector_42                USES CAN_receive
 main                      USES _PORTCD _DDRCD PLL_Init ECT_Init CAN_Init 
                                 PIT_Init 
 Init                      USES _startupData 
-CAN_Init                  USES CAN_HwCfg_Type CAN1_Init 
+CAN_Init                  USES CAN_HwCfgType CAN1_Init 
 CAN1_Init                 USES _CAN1CTL0 _CAN1CTL1 _CAN1BTR0 _CAN1BTR1 
                                 _CAN1IDMR0 _CAN1IDMR1 _CAN1IDMR2 _CAN1IDMR3 _CAN1IDMR4 
                                 _CAN1IDMR5 _CAN1IDMR6 _CAN1IDMR7 _CAN1RIER 
@@ -4011,5 +4011,5 @@ STATISTIC SECTION
 ExeFile:
 --------
 Number of blocks to be downloaded: 9
-Total size of all blocks to be downloaded: 704
+Total size of all blocks to be downloaded: 750
 

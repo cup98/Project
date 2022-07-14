@@ -2,7 +2,7 @@
 
 void PLL_Init(void)
 {
-	int i = 0;
+	//int i = 0;
 	CLKSEL_PLLSEL = 0;					//将晶振时钟设置为总线时钟
 	PLLCTL_PLLON = 0;					//关PLL
 	SYNR = 0x47;						//VCOFRQ[1:0]=1;STNDDIV[5:0]=7
@@ -11,9 +11,9 @@ void PLL_Init(void)
 	PLLCTL_PLLON = 1;					//开PLL
 	_asm(nop);
 	_asm(nop);              			//等待连两个机器周期
-	while(CRGFLG_LOCK == 0 && i < 5)	//等待PLL配置稳定
+	while(CRGFLG_LOCK == 0 )	//等待PLL配置稳定&& i < 5
 	{
-		i++;
+		//i++;
 	}
 	CLKSEL_PLLSEL = 1;					//将PLL时钟设置为时钟源
 }

@@ -4,13 +4,13 @@ int CAN_Time = 0;
 
 void CAN_Init(void)											//CAN初始化
 {
-	CAN1_Init(&CAN_HwCfg_Type);
+	CAN1_Init(&CAN_HwCfgType);
 }
 
 //CAN1初始化以及配置CLK
-void CAN1_Init(CAN_BPSConfigType *Config)
+void CAN1_Init(CAN_BpsConfigType *Config)
 {
-	int i1 = 0,i2 = 0,i3 = 0;
+	int Wait1 = 0,Wait2 = 0,Wait3 = 0;
 	if (CAN1CTL0_INITRQ == 0) 								//查询是否进入初始化状态
 	{
 		CAN1CTL0_INITRQ = 1;								//进入初始化状态
@@ -19,19 +19,19 @@ void CAN1_Init(CAN_BPSConfigType *Config)
 	{
 	}
 
-	while (CAN1CTL1_INITAK == 0 && i1 < 5)					//等待进入初始化状态
+	while (CAN1CTL1_INITAK == 0 && Wait1 < 5)				//等待进入初始化状态
 	{
-		i1++;
+		Wait1++;
 	}
 
 	CAN1BTR0_SJW = 0;										//设置同步
 
-	if (Config->CAN_BPSConfigType_BPS == CANBPS_125K)		//配置波特率为125KHz
+	if (Config->CAN_BpsConfigType_Bps == CAN_BPS_125K)		//配置波特率为125KHz
 	{														//OSC=8MHz;Bps=8MHz/BRP/(1+TSEG1+TSEG2)
 		CAN1BTR0_BRP = 0x0E;								//设置波特率预定值
 		CAN1BTR1 |= 0x1D;			  						//设置TSEG1和TSEG2时间段
 	}
-	else if (Config->CAN_BPSConfigType_BPS == CANBPS_250K)  //配置波特率为250KHz
+	else if (Config->CAN_BpsConfigType_Bps == CAN_BPS_250K)  //配置波特率为250KHz
 	{
 	}
 	else
@@ -49,13 +49,13 @@ void CAN1_Init(CAN_BPSConfigType *Config)
 	CAN1CTL1  = 0xC0;										//使能MSCAN模块,设置为一般运行模式、使用总线时钟源
 	CAN1CTL0  = 0x00;										//返回一般模式运行
 
-	while (CAN1CTL1_INITAK && i2 < 5)						//等待回到一般运行模式
+	while (CAN1CTL1_INITAK && Wait2 < 5)					//等待回到一般运行模式
 	{
-		i2++;
+		Wait2++;
 	}
-	while (CAN1CTL0_SYNCH == 0 && i3 < 5) 				    //等待总线时钟同步
+	while ((CAN1CTL0_SYNCH == 0) && Wait3 < 5) 				//等待总线时钟同步
 	{
-		i3++;
+		Wait3++;
 	}
 
 	CAN1RIER_RXFIE = 1;										//禁止接收中断
