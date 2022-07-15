@@ -192,9 +192,9 @@ int CAN1_GetMsg(CAN_MsgType *CAN_Msg)
   	{
         CAN_Msg->ID = ((unsigned long)(CAN1RXIDR0 & 0xff)) << 21;
   	    CAN_Msg->ID = CAN_Msg->ID | (((unsigned long)(CAN1RXIDR1 & 0xe0)) << 13);
-	      CAN_Msg->ID = CAN_Msg->ID | (((unsigned long)(CAN1RXIDR1 & 0x07)) << 15);
-	      CAN_Msg->ID = CAN_Msg->ID | (((unsigned long)(CAN1RXIDR2 & 0xff)) << 7);
-	      CAN_Msg->ID = CAN_Msg->ID | (((unsigned long)(CAN1RXIDR3 & 0xfe)) >> 1);
+	    CAN_Msg->ID = CAN_Msg->ID | (((unsigned long)(CAN1RXIDR1 & 0x07)) << 15);
+	    CAN_Msg->ID = CAN_Msg->ID | (((unsigned long)(CAN1RXIDR2 & 0xff)) << 7);
+	    CAN_Msg->ID = CAN_Msg->ID | (((unsigned long)(CAN1RXIDR3 & 0xfe)) >> 1);
         CAN_Msg->IDE = 1;
 
         if (CAN1RXIDR3 & 0x01)                         			  //判断是否为远程帧
