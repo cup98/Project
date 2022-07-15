@@ -1,5 +1,5 @@
 
-PROGRAM "H:\git\CAN_IO\Project\bin\Project.abs"
+PROGRAM "C:\Users\Administrator\Desktop\新建文件夹 (3)\Project\bin\Project.abs"
 
 *********************************************************************************************
 TARGET SECTION
@@ -15,12 +15,12 @@ FILE SECTION
 MC9S12XEP100.c.o                        Model: BANKED,        Lang: ANSI-C
 main.c.o                                Model: BANKED,        Lang: ANSI-C
 Start12.c.o                             Model: BANKED,        Lang: ANSI-C
-rtshc12.c.o (ansixbf.lib)               Model: BANKED,        Lang: ANSI-C
+rtshc12.c.o (ansixbi.lib)               Model: BANKED,        Lang: ANSI-C
 CAN.c.o                                 Model: BANKED,        Lang: ANSI-C
+CAN_Cfg.c.o                             Model: BANKED,        Lang: ANSI-C
 ECT.c.o                                 Model: BANKED,        Lang: ANSI-C
 PIT.c.o                                 Model: BANKED,        Lang: ANSI-C
 PLL.c.o                                 Model: BANKED,        Lang: ANSI-C
-CAN_Cfg.c.o                             Model: BANKED,        Lang: ANSI-C
 
 *********************************************************************************************
 STARTUP SECTION
@@ -1556,7 +1556,7 @@ MODULE:                 -- Start12.c.o --
      _startupData                              C00F       6       6       3   .startData  
 - LABELS:
      __SEG_END_SSTACK                          2100       0       0       1               
-MODULE:                 -- rtshc12.c.o (ansixbf.lib) --
+MODULE:                 -- rtshc12.c.o (ansixbi.lib) --
 - PROCEDURES:
      _LSHL                                     C051       D      13       2   NON_BANKED  
      _LSHRU                                    C05E       E      14       4   NON_BANKED  
@@ -1577,6 +1577,13 @@ MODULE:                 -- CAN.c.o --
      _Vector_42                                FFAA       2       2       0   .abs_section_ffaa
      _Vector_66                                FF7A       2       2       0   .abs_section_ff7a
      CAN1_GetBufType                           213B      12      18       2   .common     
+MODULE:                 -- CAN_Cfg.c.o --
+- PROCEDURES:
+- VARIABLES:
+     CAN_Msg1Type                              2100      12      18       1   .data       
+     CAN_Msg2Type                              2112      12      18       1   .data       
+     CAN_Msg3Type                              2124      12      18       1   .data       
+     CAN_HwCfgType                             2136       3       3       1   .data       
 MODULE:                 -- ECT.c.o --
 - PROCEDURES:
      ECT_Init                                FE8319      24      36       2   .text       
@@ -1590,13 +1597,6 @@ MODULE:                 -- PLL.c.o --
 - PROCEDURES:
      PLL_Init                                FE8361      1D      29       2   .text       
 - VARIABLES:
-MODULE:                 -- CAN_Cfg.c.o --
-- PROCEDURES:
-- VARIABLES:
-     CAN_Msg1Type                              2100      12      18       1   .data       
-     CAN_Msg2Type                              2112      12      18       1   .data       
-     CAN_Msg3Type                              2124      12      18       1   .data       
-     CAN_HwCfgType                             2136       3       3       1   .data       
 
 *********************************************************************************************
 MODULE STATISTIC
@@ -1605,12 +1605,12 @@ MODULE STATISTIC
   MC9S12XEP100.c.o                           899      0      0
   main.c.o                                     0     41      0
   Start12.c.o                                  0     56      0
-  rtshc12.c.o (ansixbf.lib)                    0     47      0
+  rtshc12.c.o (ansixbi.lib)                    0     47      0
   CAN.c.o                                     20    725      4
+  CAN_Cfg.c.o                                 57      0      0
   ECT.c.o                                      0     36      0
   PIT.c.o                                      0     36      0
   PLL.c.o                                      0     29      0
-  CAN_Cfg.c.o                                 57      0      0
   other                                      256     68     60
 
 *********************************************************************************************
@@ -3883,7 +3883,7 @@ OBJECT LIST SORTED BY ADDRESS
 UNUSED-OBJECTS SECTION
 ---------------------------------------------------------------------------------------------
 NOT USED PROCEDURES
-rtshc12.c.o (ansixbf.lib):
+rtshc12.c.o (ansixbi.lib):
   _BSHL _BSHRS _BSHRU _BDIVMODU _BDIVMODS _ISHL _ISHRU _ISHRS _LSHRS _LADD 
   _LSUB _LAND _LOR _LXOR _LCMP _LCMP_P _LCMP_PP _LNEG _LCOM _LINC _LDEC _LMUL 
   _LMULU16x32 _LMULS16x32 _lDivMod _LDIVU _NEG_P _LDIVS _LMODU _LMODS _ILSEXT 
@@ -3895,7 +3895,7 @@ CAN.c.o:
 PIT.c.o:
   PIT1_Init 
 NOT USED VARIABLES
-rtshc12.c.o (ansixbf.lib):
+rtshc12.c.o (ansixbi.lib):
   _PowOfTwo_8 _PowOfTwo_16 _PowOfTwo_32 errno 
 
 *********************************************************************************************
