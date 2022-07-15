@@ -1,43 +1,8 @@
 #include "CAN.h"
+#include "CAN_Cfg.h"
 
 int CAN_Time = 0;
 CAN_MsgType CAN1_GetBufType;		//声明CAN1接收缓存
-
-static CAN_ConfigType CAN_HwCfgType =			//设置波特率
-{
-	CAN_BPS_125K,
-	1,
-};
-
-static CAN_MsgType CAN_Msg1Type =					//设置CAN标准帧
-{
-	0x01,
-	0,
-	0,
-	{1,1,1,1,1,1,1,1},
-	8,
-	0,
-};
-
-static CAN_MsgType CAN_Msg2Type =
-{
-	0x00FFF,
-	1,
-	0,
-	{2,2,2,2,2,2,2,2},
-	8,
-	0,
-};
-
-static CAN_MsgType CAN_Msg3Type =
-{
-	0x03,
-	0,
-	1,
-	{3,3,3,3,3,3,3,3},
-	8,
-	0,
-};
 
 void CAN_Init(void)											//CAN初始�
 {
@@ -168,12 +133,12 @@ int CAN1_SendMsg(CAN_MsgType *CAN_Msg)
 	/*��չ֡ID����*/
 	if (CAN_Msg->IDE)
 	{
-  		CAN1TXIDR0 =  (unsigned long)(CAN_Msg->ID >> 21);
-  		CAN1TXIDR1 =  (unsigned long)(CAN_Msg->ID >> 13) & 0xE0;
+  		CAN1TXIDR0 =  (unsigned char)(CAN_Msg->ID >> 21);
+  		CAN1TXIDR1 =  (unsigned char)(CAN_Msg->ID >> 13) & 0xE0;
   		CAN1TXIDR1 |= 0x18;
-  		CAN1TXIDR1 |= (unsigned long)(CAN_Msg->ID >> 15) & 0x07;
-  		CAN1TXIDR2 =  (unsigned long)(CAN_Msg->ID >> 7);
-  		CAN1TXIDR3 =  (unsigned long)(CAN_Msg->ID << 1);
+  		CAN1TXIDR1 |= (unsigned char)(CAN_Msg->ID >> 15) & 0x07;
+  		CAN1TXIDR2 =  (unsigned char)(CAN_Msg->ID >> 7);
+  		CAN1TXIDR3 =  (unsigned char)(CAN_Msg->ID << 1);
   		if (CAN_Msg->RTR)								//判断IDE�0标准�,1远程�
 		{
 			CAN1TXIDR3 |= 0x01;
@@ -185,9 +150,10 @@ int CAN1_SendMsg(CAN_MsgType *CAN_Msg)
 	}
 	else
 	{/*��׼֡ID����*/
-  		CAN1TXIDR0 =  (unsigned long)(CAN_Msg->ID >> 3);
-  		CAN1TXIDR1 =  (unsigned long)(CAN_Msg->ID << 5);
+  		CAN1TXIDR0 =  (unsigned char)(CAN_Msg->ID >> 3);
+  		CAN1TXIDR1 =  (unsigned char)(CAN_Msg->ID << 5);
   		CAN1TXIDR1 &= 0xF7;
+
   		if (CAN_Msg->RTR)								//判断IDE�0标准�,1远程�
 		{
 			CAN1TXIDR1 |= 0x10;
@@ -209,7 +175,6 @@ int CAN1_SendMsg(CAN_MsgType *CAN_Msg)
 
 	Reflag = 1;
 	return Reflag;
-	
 }
 
 //CAN1接收
@@ -276,13 +241,13 @@ void CAN1_SendDemo(void)
 
   	if (CAN_Time == 1)
   	{
-  	  	if(CAN1_SendMsg(&CAN_Msg1Type) == 1) 
+  	  	if(CAN1_SendMsg(&CAN_Msg1Type) == 1)
   	  	{
   	  	}
   	}
   	else if (CAN_Time == 2)
   	{
-  	  	if(CAN1_SendMsg(&CAN_Msg2Type) == 1) 
+  	  	if(CAN1_SendMsg(&CAN_Msg2Type) == 1)
   	  	{
   	  	}
   	}
@@ -327,4 +292,15 @@ void interrupt VectorNumber_Vcan1rx CAN_receive(void)
 }
 #pragma CODE_SEG DEFAULT
 
+
+#pragma CODE_SEG __NEAR_SEG NON_BANKED
+
+void interrupt VectorNumber_Vpit0 PIT0(void)	//中断服务函数
+{
+    PITTF_PTF0 = 1;
+    CAN1_SendDemo();							//PIT0中断
+    //CAN1_GetToSend();
+}
+
+#pragma CODE_SEG DEFAULT
 

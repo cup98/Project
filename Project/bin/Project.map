@@ -20,6 +20,7 @@ CAN.c.o                                 Model: BANKED,        Lang: ANSI-C
 ECT.c.o                                 Model: BANKED,        Lang: ANSI-C
 PIT.c.o                                 Model: BANKED,        Lang: ANSI-C
 PLL.c.o                                 Model: BANKED,        Lang: ANSI-C
+CAN_Cfg.c.o                             Model: BANKED,        Lang: ANSI-C
 
 *********************************************************************************************
 STARTUP SECTION
@@ -29,7 +30,7 @@ _startupData is allocated at 0xC00F and uses 6 Bytes
 extern struct _tagStartup {
   unsigned nofZeroOut     1
   _Range   pZeroOut       0x2100     77
-  _Copy    *toCopyDownBeg 0xC08F
+  _Copy    *toCopyDownBeg 0xC08E
 } _startupData;
 
 *********************************************************************************************
@@ -38,8 +39,8 @@ Section Name                    Size  Type     From       To       Segment
 ---------------------------------------------------------------------------------------------
 .init                             15     R     0xC000     0xC00E   ROM_C000
 .startData                        66     R     0xC00F     0xC050   ROM_C000
-NON_BANKED                        62     R     0xC051     0xC08E   ROM_C000
-.copy                             61     R     0xC08F     0xC0CB   ROM_C000
+NON_BANKED                        61     R     0xC051     0xC08D   ROM_C000
+.copy                             60     R     0xC08E     0xC0C9   ROM_C000
 .text                            894     R   0xFE8000   0xFE837D   PAGE_FE
 .stack                           256   R/W     0x2000     0x20FF   RAM
 .data                             57   R/W     0x2100     0x2138   RAM
@@ -783,13 +784,12 @@ NON_BANKED                        62     R     0xC051     0xC08E   ROM_C000
 .abs_section_3f2                   2   N/I      0x3F2      0x3F3   .absSeg737
 .abs_section_ffaa                  2     R     0xFFAA     0xFFAB   .absSeg738
 .abs_section_ff7a                  2     R     0xFF7A     0xFF7B   .absSeg739
-.abs_section_ff78                  2     R     0xFF78     0xFF79   .absSeg740
 .bss                               2   R/W     0x2139     0x213A   RAM
 .common                           18   R/W     0x213B     0x214C   RAM
-.vectSeg741_vect                   2     R     0xFFFE     0xFFFF   .vectSeg741
+.vectSeg740_vect                   2     R     0xFFFE     0xFFFF   .vectSeg740
 
 Summary of section sizes per section type:
-READ_ONLY (R):         452 (dec:     1106)
+READ_ONLY (R):         44E (dec:     1102)
 READ_WRITE (R/W):      14D (dec:      333)
 NO_INIT (N/I):         383 (dec:      899)
 
@@ -1571,13 +1571,11 @@ MODULE:                 -- CAN.c.o --
      CAN1_SendDemo                           FE82D8      2F      47       2   .text       
      CAN1_GetToSend                          FE8307      12      18       2   .text       
      CAN_receive                               C080       5       5       1   NON_BANKED  
+     PIT0                                      C085       9       9       1   NON_BANKED  
 - VARIABLES:
-     CAN_HwCfgType                             2100       3       3       1   .data       
-     CAN_Msg1Type                              2103      12      18       1   .data       
-     CAN_Msg2Type                              2115      12      18       1   .data       
-     CAN_Msg3Type                              2127      12      18       1   .data       
      CAN_Time                                  2139       2       2       3   .bss        
      _Vector_42                                FFAA       2       2       0   .abs_section_ffaa
+     _Vector_66                                FF7A       2       2       0   .abs_section_ff7a
      CAN1_GetBufType                           213B      12      18       2   .common     
 MODULE:                 -- ECT.c.o --
 - PROCEDURES:
@@ -1587,15 +1585,18 @@ MODULE:                 -- PIT.c.o --
 - PROCEDURES:
      PIT_Init                                FE833D       5       5       2   .text       
      PIT0_Init                               FE8342      1F      31       2   .text       
-     PIT0                                      C085       9       9       1   NON_BANKED  
-     PIT1                                      C08E       1       1       1   NON_BANKED  
 - VARIABLES:
-     _Vector_66                                FF7A       2       2       0   .abs_section_ff7a
-     _Vector_67                                FF78       2       2       0   .abs_section_ff78
 MODULE:                 -- PLL.c.o --
 - PROCEDURES:
      PLL_Init                                FE8361      1D      29       2   .text       
 - VARIABLES:
+MODULE:                 -- CAN_Cfg.c.o --
+- PROCEDURES:
+- VARIABLES:
+     CAN_Msg1Type                              2100      12      18       1   .data       
+     CAN_Msg2Type                              2112      12      18       1   .data       
+     CAN_Msg3Type                              2124      12      18       1   .data       
+     CAN_HwCfgType                             2136       3       3       1   .data       
 
 *********************************************************************************************
 MODULE STATISTIC
@@ -1605,11 +1606,12 @@ MODULE STATISTIC
   main.c.o                                     0     41      0
   Start12.c.o                                  0     56      0
   rtshc12.c.o (ansixbf.lib)                    0     47      0
-  CAN.c.o                                     77    716      2
+  CAN.c.o                                     20    725      4
   ECT.c.o                                      0     36      0
-  PIT.c.o                                      0     46      4
+  PIT.c.o                                      0     36      0
   PLL.c.o                                      0     29      0
-  other                                      256     68     61
+  CAN_Cfg.c.o                                 57      0      0
+  other                                      256     68     60
 
 *********************************************************************************************
 SECTION USE IN OBJECT-ALLOCATION SECTION
@@ -1618,13 +1620,13 @@ SECTION: ".text"
   main Init CAN_Init CAN1_Init CAN1_SendMsg CAN1_GetMsg CAN1_SendDemo 
   CAN1_GetToSend ECT_Init PIT_Init PIT0_Init PLL_Init 
 SECTION: ".data"
-  CAN_HwCfgType CAN_Msg1Type CAN_Msg2Type CAN_Msg3Type 
+  CAN_Msg1Type CAN_Msg2Type CAN_Msg3Type CAN_HwCfgType 
 SECTION: ".bss"
   CAN_Time 
 SECTION: ".init"
   _Startup 
 SECTION: "NON_BANKED"
-  _LSHL _LSHRU _CASE_CHECKED_BYTE CAN_receive PIT0 PIT1 
+  _LSHL _LSHRU _CASE_CHECKED_BYTE CAN_receive PIT0 
 SECTION: ".abs_section_8"
   _PORTE 
 SECTION: ".abs_section_9"
@@ -3107,8 +3109,6 @@ SECTION: ".abs_section_ffaa"
   _Vector_42 
 SECTION: ".abs_section_ff7a"
   _Vector_66 
-SECTION: ".abs_section_ff78"
-  _Vector_67 
 
 *********************************************************************************************
 OBJECT LIST SORTED BY ADDRESS
@@ -3852,10 +3852,10 @@ OBJECT LIST SORTED BY ADDRESS
      _TIM_PACNT                                 3F2       2       2       0   .abs_section_3f2
      _TIM_OCPD                                  3FC       1       1       0   .abs_section_3fc
      _TIM_PTPSR                                 3FE       1       1       0   .abs_section_3fe
-     CAN_HwCfgType                             2100       3       3       1   .data       
-     CAN_Msg1Type                              2103      12      18       1   .data       
-     CAN_Msg2Type                              2115      12      18       1   .data       
-     CAN_Msg3Type                              2127      12      18       1   .data       
+     CAN_Msg1Type                              2100      12      18       1   .data       
+     CAN_Msg2Type                              2112      12      18       1   .data       
+     CAN_Msg3Type                              2124      12      18       1   .data       
+     CAN_HwCfgType                             2136       3       3       1   .data       
      CAN_Time                                  2139       2       2       3   .bss        
      CAN1_GetBufType                           213B      12      18       2   .common     
      _Startup                                  C000       F      15       0   .init       
@@ -3864,8 +3864,6 @@ OBJECT LIST SORTED BY ADDRESS
      _CASE_CHECKED_BYTE                        C06C      14      20       1   NON_BANKED  
      CAN_receive                               C080       5       5       1   NON_BANKED  
      PIT0                                      C085       9       9       1   NON_BANKED  
-     PIT1                                      C08E       1       1       1   NON_BANKED  
-     _Vector_67                                FF78       2       2       0   .abs_section_ff78
      _Vector_66                                FF7A       2       2       0   .abs_section_ff7a
      _Vector_42                                FFAA       2       2       0   .abs_section_ffaa
      main                                    FE8000      29      41       2   .text       
@@ -3903,37 +3901,38 @@ rtshc12.c.o (ansixbf.lib):
 *********************************************************************************************
 COPYDOWN SECTION
 ---------------------------------------------------------------------------------------------
-------- ROM-ADDRESS: 0xC08F ---- SIZE       4 ---
+------- ROM-ADDRESS: 0xC08E ---- SIZE       4 ---
 Filling bytes inserted
- 00372101
-------- ROM-ADDRESS: 0xC093 ---- RAM-ADDRESS: 0x2101 ---- SIZE       2 ---
-Name of initialized Object : CAN_HwCfgType:1
- 0301
-------- ROM-ADDRESS: 0xC095 ---- SIZE       3 ---
-Filling bytes inserted
- 000000
-------- ROM-ADDRESS: 0xC098 ---- RAM-ADDRESS: 0x2106 ---- SIZE       1 ---
+ 00362103
+------- ROM-ADDRESS: 0xC092 ---- RAM-ADDRESS: 0x2103 ---- SIZE       1 ---
 Name of initialized Object : CAN_Msg1Type:3
- 01
-------- ROM-ADDRESS: 0xC099 ---- SIZE       4 ---
+ 1F
+------- ROM-ADDRESS: 0xC093 ---- SIZE       4 ---
 Filling bytes inserted
  00000000
-------- ROM-ADDRESS: 0xC09D ---- RAM-ADDRESS: 0x210B ---- SIZE       9 ---
+------- ROM-ADDRESS: 0xC097 ---- RAM-ADDRESS: 0x2108 ---- SIZE       9 ---
 Name of initialized Object : CAN_Msg1Type:8
  0101010101 01010108
-------- ROM-ADDRESS: 0xC0A6 ---- SIZE       3 ---
+------- ROM-ADDRESS: 0xC0A0 ---- SIZE       1 ---
 Filling bytes inserted
- 000000
-------- ROM-ADDRESS: 0xC0A9 ---- RAM-ADDRESS: 0x2117 ---- SIZE      15 ---
-Name of initialized Object : CAN_Msg2Type:2
- 0FFF000100 0002020202 0202020208
-------- ROM-ADDRESS: 0xC0B8 ---- SIZE       4 ---
+ 00
+------- ROM-ADDRESS: 0xC0A1 ---- RAM-ADDRESS: 0x2112 ---- SIZE      17 ---
+Name of initialized Object : CAN_Msg2Type
+ 1FFFFFFF00 0100000202 0202020202
+ 0208
+------- ROM-ADDRESS: 0xC0B2 ---- SIZE       4 ---
 Filling bytes inserted
  00000000
-------- ROM-ADDRESS: 0xC0BC ---- RAM-ADDRESS: 0x212A ---- SIZE      14 ---
+------- ROM-ADDRESS: 0xC0B6 ---- RAM-ADDRESS: 0x2127 ---- SIZE      14 ---
 Name of initialized Object : CAN_Msg3Type:3
  0300000001 0303030303 03030308
-------- ROM-ADDRESS: 0xC0CA ---- SIZE       2 ---
+------- ROM-ADDRESS: 0xC0C4 ---- SIZE       2 ---
+Filling bytes inserted
+ 0000
+------- ROM-ADDRESS: 0xC0C6 ---- RAM-ADDRESS: 0x2137 ---- SIZE       2 ---
+Name of initialized Object : CAN_HwCfgType:1
+ 0301
+------- ROM-ADDRESS: 0xC0C8 ---- SIZE       2 ---
 Filling bytes inserted
  0000
 
@@ -3943,7 +3942,6 @@ OBJECT-DEPENDENCIES SECTION
 _Startup                  USES __SEG_END_SSTACK Init main 
 CAN_receive               USES CAN1_GetToSend 
 PIT0                      USES _PITTF CAN1_SendDemo 
-_Vector_67                USES PIT1 
 _Vector_66                USES PIT0 
 _Vector_42                USES CAN_receive 
 main                      USES _PORTCD _DDRCD PLL_Init ECT_Init CAN_Init 
@@ -4019,16 +4017,12 @@ DEPENDENCY TREE
        | 
        +- CAN1_SendMsg         (see above)
           
- _Vector_67          
- | 
- +- PIT1                
-      
 *********************************************************************************************
 STATISTIC SECTION
 ---------------------------------------------------------------------------------------------
 
 ExeFile:
 --------
-Number of blocks to be downloaded: 9
-Total size of all blocks to be downloaded: 1106
+Number of blocks to be downloaded: 8
+Total size of all blocks to be downloaded: 1102
 

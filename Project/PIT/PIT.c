@@ -1,5 +1,4 @@
 #include "PIT.h"
-#include "CAN.h"
 
 void PIT_Init(void)
 {
@@ -28,23 +27,3 @@ void PIT1_Init(void)							//初始化PIT，利用8位基准0和16位定时器0�
 	PITCFLMT_PITE = 0;
 }
 
-#pragma CODE_SEG __NEAR_SEG NON_BANKED
-
-void interrupt VectorNumber_Vpit0 PIT0(void)	//中断服务函数
-{
-    PITTF_PTF0 = 1;
-    CAN1_SendDemo();							//PIT0中断
-    //CAN1_GetToSend();
-}
-
-#pragma CODE_SEG DEFAULT
-
-#pragma CODE_SEG __NEAR_SEG NON_BANKED
-
-void interrupt VectorNumber_Vpit1 PIT1(void)	//中断服务函数
-{
-    //PITTF_PTF1 = 1;
-    //Time_Flag();								//PIT1中断
-}
-
-#pragma CODE_SEG DEFAULT

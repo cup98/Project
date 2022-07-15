@@ -26,6 +26,5 @@ void main(void)
     for(;;)
     {
         _FEED_COP();
-        //Node_Poll();
     }
 }
