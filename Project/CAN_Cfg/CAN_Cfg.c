@@ -3,11 +3,11 @@
 #include "hidef.h"
 #include "derivative.h"
 
-#define CAN0 0x0140
-#define CAN1 0x0180
-#define CAN2 0x01C0
-#define CAN3 0x0200
-#define CAN4 0x0240
+#define CAN0_Add 0x0140
+#define CAN1_Add 0x0180
+#define CAN2_Add 0x01C0
+#define CAN3_Add 0x0200
+#define CAN4_Add 0x0240
 
 #define CANCTL0   *(CAN0CTL0+)
 #define CANCTL1   *(CAN0CTL1)

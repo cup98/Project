@@ -16,6 +16,15 @@ typedef struct _CAN_MsgType							//构造CAN通信报文结构
 	unsigned char Prty;
 } CAN_MsgType;
 
+typedef enum _CAN_Channel_CfgType							//CAN波特率选择
+{
+	CAN0; 							  		//波特率设置为250K
+	CAN1;
+	CAN2;
+	CAN3; 									//波特率设置为125K
+	CAN4;							  		//波特率设置为250K
+} CAN_Channel_CfgType;
+
 typedef enum _CAN_BpsCfgType							//CAN波特率选择
 {
 	CAN_BPS_20K,							  		//波特率设置为250K
