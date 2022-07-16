@@ -185,7 +185,7 @@ int CAN1_SendMsg(CAN_ConfigType *CAN_Cfg,CAN_MsgType *CAN_Msg)
 		Reflag = 0;
 	}
 
-	if ((*CANCTL0 & 0x10) == 0)								//妫鏌ユ荤嚎鏃堕挓
+	if (((*CANCTL0) & 0x10) == 0)								//妫鏌ユ荤嚎鏃堕挓
 	{
 		Reflag = 0;
 	}
@@ -193,8 +193,8 @@ int CAN1_SendMsg(CAN_ConfigType *CAN_Cfg,CAN_MsgType *CAN_Msg)
 	do
 	{
 		*CANTBSEL = *CANTFLG;
-		send_buf  = CAN1TBSEL;
-	} while (!(send_buf));									//瀵绘壘绌洪棽鐨勭紦鍐插櫒
+		send_buf  = CAN1TBSEL;	//这里用*CANTBSEL代替就不行
+	} while (!send_buf);									//瀵绘壘绌洪棽鐨勭紦鍐插櫒
 
 	/*扩展帧ID发送*/
 	if (CAN_Msg->IDE)
@@ -295,7 +295,7 @@ int CAN1_GetMsg(CAN_ConfigType *CAN_Cfg,CAN_MsgType *CAN_Msg)
   		CAN_Msg->Data[sp] = *(CANRXDSR0 + sp);
   	}
 
-  	*CANRFLG |= 1;											  //娓匯XF鏍囧織浣(缂撳啿鍣ㄥ噯澶囨帴鏀)
+  	*CANRFLG = 0x01;											  //娓匯XF鏍囧織浣(缂撳啿鍣ㄥ噯澶囨帴鏀)
 
     Reflag = 1;
   	return Reflag;
@@ -305,23 +305,21 @@ int CAN1_GetMsg(CAN_ConfigType *CAN_Cfg,CAN_MsgType *CAN_Msg)
 void CAN1_SendDemo(void)
 {
 	CAN_Time++;
-	
-
   	if (CAN_Time == 1)
   	{
-  	  	if(CAN1_SendMsg(&CAN1_HwCfgType,&CAN_Msg1Type) == 1);
+  	  	if(CAN1_SendMsg(&CAN1_HwCfgType, &CAN_Msg1Type) == 1);
   	  	{
   	  	}
   	}
   	else if (CAN_Time == 2)
   	{
-  	  	if(CAN1_SendMsg(&CAN1_HwCfgType,&CAN_Msg2Type) == 1)
+  	  	if(CAN1_SendMsg(&CAN1_HwCfgType, &CAN_Msg2Type) == 1)
   	  	{
   	  	}
   	}
  	else if (CAN_Time == 3)
   	{
-    	if(CAN1_SendMsg(&CAN1_HwCfgType,&CAN_Msg3Type) == 1)
+    	if(CAN1_SendMsg(&CAN1_HwCfgType, &CAN_Msg3Type) == 1)
     	{
     	}
     	CAN_Time = 0;
@@ -333,9 +331,9 @@ void CAN1_SendDemo(void)
 
 void CAN1_GetToSend(void)									  //璇诲嚭鎺ュ彈鍒扮殑鏁版嵁鍐嶅彂閫佸嚭鏉
 {
-  	if (CAN1_GetMsg(&CAN1_HwCfgType,&CAN1_GetBufType) == 1)
+  	if (CAN1_GetMsg(&CAN1_HwCfgType, &CAN1_GetBufType) == 1)
   	{
-      	if(CAN1_SendMsg(&CAN1_HwCfgType,&CAN1_GetBufType) == 1)
+      	if(CAN1_SendMsg(&CAN1_HwCfgType, &CAN1_GetBufType) == 1)
       	{
       	  //break;
       	}

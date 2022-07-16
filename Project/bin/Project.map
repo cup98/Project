@@ -41,7 +41,7 @@ Section Name                    Size  Type     From       To       Segment
 .startData                        66     R     0xC00F     0xC050   ROM_C000
 NON_BANKED                        61     R     0xC051     0xC08D   ROM_C000
 .copy                             62     R     0xC08E     0xC0CB   ROM_C000
-.text                           1219     R   0xFE8000   0xFE84C2   PAGE_FE
+.text                           1217     R   0xFE8000   0xFE84C0   PAGE_FE
 .stack                           256   R/W     0x2000     0x20FF   RAM
 .data                             59   R/W     0x2100     0x213A   RAM
 .abs_section_8                     1   N/I        0x8        0x8   .absSeg0
@@ -789,7 +789,7 @@ NON_BANKED                        61     R     0xC051     0xC08D   ROM_C000
 .vectSeg740_vect                   2     R     0xFFFE     0xFFFF   .vectSeg740
 
 Summary of section sizes per section type:
-READ_ONLY (R):         595 (dec:     1429)
+READ_ONLY (R):         593 (dec:     1427)
 READ_WRITE (R/W):      189 (dec:      393)
 NO_INIT (N/I):         383 (dec:      899)
 
@@ -1568,9 +1568,9 @@ MODULE:                 -- CAN.c.o --
      CAN_Init                                FE8125       8       8       2   .text       
      CAN1_Init                               FE812D      FA     250       6   .text       
      CAN1_SendMsg                            FE8227      F0     240       9   .text       
-     CAN1_GetMsg                             FE8317      EA     234       5   .text       
-     CAN1_SendDemo                           FE8401      3F      63       2   .text       
-     CAN1_GetToSend                          FE8440      1E      30       2   .text       
+     CAN1_GetMsg                             FE8317      E8     232       5   .text       
+     CAN1_SendDemo                           FE83FF      3F      63       2   .text       
+     CAN1_GetToSend                          FE843E      1E      30       2   .text       
      CAN_receive                               C080       5       5       1   NON_BANKED  
      PIT0                                      C085       9       9       1   NON_BANKED  
 - VARIABLES:
@@ -1616,16 +1616,16 @@ MODULE:                 -- CAN_Cfg.c.o --
      CAN1_HwCfgType                            2136       5       5       6   .data       
 MODULE:                 -- ECT.c.o --
 - PROCEDURES:
-     ECT_Init                                FE845E      24      36       2   .text       
+     ECT_Init                                FE845C      24      36       2   .text       
 - VARIABLES:
 MODULE:                 -- PIT.c.o --
 - PROCEDURES:
-     PIT_Init                                FE8482       5       5       2   .text       
-     PIT0_Init                               FE8487      1F      31       2   .text       
+     PIT_Init                                FE8480       5       5       2   .text       
+     PIT0_Init                               FE8485      1F      31       2   .text       
 - VARIABLES:
 MODULE:                 -- PLL.c.o --
 - PROCEDURES:
-     PLL_Init                                FE84A6      1D      29       2   .text       
+     PLL_Init                                FE84A4      1D      29       2   .text       
 - VARIABLES:
 
 *********************************************************************************************
@@ -1636,7 +1636,7 @@ MODULE STATISTIC
   main.c.o                                     0     41      0
   Start12.c.o                                  0     56      0
   rtshc12.c.o (ansixbi.lib)                    0     47      0
-  CAN.c.o                                     78   1050      4
+  CAN.c.o                                     78   1048      4
   CAN_Cfg.c.o                                 59      0      0
   ECT.c.o                                      0     36      0
   PIT.c.o                                      0     36      0
@@ -3934,13 +3934,13 @@ OBJECT LIST SORTED BY ADDRESS
      CAN_Init                                FE8125       8       8       2   .text       
      CAN1_Init                               FE812D      FA     250       6   .text       
      CAN1_SendMsg                            FE8227      F0     240       9   .text       
-     CAN1_GetMsg                             FE8317      EA     234       5   .text       
-     CAN1_SendDemo                           FE8401      3F      63       2   .text       
-     CAN1_GetToSend                          FE8440      1E      30       2   .text       
-     ECT_Init                                FE845E      24      36       2   .text       
-     PIT_Init                                FE8482       5       5       2   .text       
-     PIT0_Init                               FE8487      1F      31       2   .text       
-     PLL_Init                                FE84A6      1D      29       2   .text       
+     CAN1_GetMsg                             FE8317      E8     232       5   .text       
+     CAN1_SendDemo                           FE83FF      3F      63       2   .text       
+     CAN1_GetToSend                          FE843E      1E      30       2   .text       
+     ECT_Init                                FE845C      24      36       2   .text       
+     PIT_Init                                FE8480       5       5       2   .text       
+     PIT0_Init                               FE8485      1F      31       2   .text       
+     PLL_Init                                FE84A4      1D      29       2   .text       
 
 *********************************************************************************************
 UNUSED-OBJECTS SECTION
@@ -4108,5 +4108,5 @@ STATISTIC SECTION
 ExeFile:
 --------
 Number of blocks to be downloaded: 8
-Total size of all blocks to be downloaded: 1429
+Total size of all blocks to be downloaded: 1427
 
