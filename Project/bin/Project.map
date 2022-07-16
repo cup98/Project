@@ -41,7 +41,7 @@ Section Name                    Size  Type     From       To       Segment
 .startData                        66     R     0xC00F     0xC050   ROM_C000
 NON_BANKED                        61     R     0xC051     0xC08D   ROM_C000
 .copy                             62     R     0xC08E     0xC0CB   ROM_C000
-.text                           1185     R   0xFE8000   0xFE84A0   PAGE_FE
+.text                           1219     R   0xFE8000   0xFE84C2   PAGE_FE
 .stack                           256   R/W     0x2000     0x20FF   RAM
 .data                             59   R/W     0x2100     0x213A   RAM
 .abs_section_8                     1   N/I        0x8        0x8   .absSeg0
@@ -789,7 +789,7 @@ NON_BANKED                        61     R     0xC051     0xC08D   ROM_C000
 .vectSeg740_vect                   2     R     0xFFFE     0xFFFF   .vectSeg740
 
 Summary of section sizes per section type:
-READ_ONLY (R):         573 (dec:     1395)
+READ_ONLY (R):         595 (dec:     1429)
 READ_WRITE (R/W):      189 (dec:      393)
 NO_INIT (N/I):         383 (dec:      899)
 
@@ -1031,7 +1031,7 @@ MODULE:                 -- MC9S12XEP100.c.o --
      _CAN1CTL1                                  181       1       1       0   .abs_section_181
      _CAN1BTR0                                  182       1       1       0   .abs_section_182
      _CAN1BTR1                                  183       1       1       0   .abs_section_183
-     _CAN1RFLG                                  184       1       1       1   .abs_section_184
+     _CAN1RFLG                                  184       1       1       0   .abs_section_184
      _CAN1RIER                                  185       1       1       1   .abs_section_185
      _CAN1TFLG                                  186       1       1       0   .abs_section_186
      _CAN1TIER                                  187       1       1       0   .abs_section_187
@@ -1058,11 +1058,11 @@ MODULE:                 -- MC9S12XEP100.c.o --
      _CAN1IDMR5                                 19D       1       1       0   .abs_section_19d
      _CAN1IDMR6                                 19E       1       1       0   .abs_section_19e
      _CAN1IDMR7                                 19F       1       1       0   .abs_section_19f
-     _CAN1RXIDR0                                1A0       1       1       2   .abs_section_1a0
-     _CAN1RXIDR1                                1A1       1       1       5   .abs_section_1a1
-     _CAN1RXIDR2                                1A2       1       1       1   .abs_section_1a2
-     _CAN1RXIDR3                                1A3       1       1       2   .abs_section_1a3
-     _CAN1RXDSR0                                1A4       1       1       1   .abs_section_1a4
+     _CAN1RXIDR0                                1A0       1       1       0   .abs_section_1a0
+     _CAN1RXIDR1                                1A1       1       1       0   .abs_section_1a1
+     _CAN1RXIDR2                                1A2       1       1       0   .abs_section_1a2
+     _CAN1RXIDR3                                1A3       1       1       0   .abs_section_1a3
+     _CAN1RXDSR0                                1A4       1       1       0   .abs_section_1a4
      _CAN1RXDSR1                                1A5       1       1       0   .abs_section_1a5
      _CAN1RXDSR2                                1A6       1       1       0   .abs_section_1a6
      _CAN1RXDSR3                                1A7       1       1       0   .abs_section_1a7
@@ -1070,7 +1070,7 @@ MODULE:                 -- MC9S12XEP100.c.o --
      _CAN1RXDSR5                                1A9       1       1       0   .abs_section_1a9
      _CAN1RXDSR6                                1AA       1       1       0   .abs_section_1aa
      _CAN1RXDSR7                                1AB       1       1       0   .abs_section_1ab
-     _CAN1RXDLR                                 1AC       1       1       1   .abs_section_1ac
+     _CAN1RXDLR                                 1AC       1       1       0   .abs_section_1ac
      _CAN1TXIDR0                                1B0       1       1       0   .abs_section_1b0
      _CAN1TXIDR1                                1B1       1       1       0   .abs_section_1b1
      _CAN1TXIDR2                                1B2       1       1       0   .abs_section_1b2
@@ -1564,13 +1564,13 @@ MODULE:                 -- rtshc12.c.o (ansixbi.lib) --
 - VARIABLES:
 MODULE:                 -- CAN.c.o --
 - PROCEDURES:
-     CAN_RegAdd_Cfg                          FE8052      D3     211       4   .text       
+     CAN_RegAdd_Cfg                          FE8052      D3     211       6   .text       
      CAN_Init                                FE8125       8       8       2   .text       
      CAN1_Init                               FE812D      FA     250       6   .text       
      CAN1_SendMsg                            FE8227      F0     240       9   .text       
-     CAN1_GetMsg                             FE8317      CE     206       4   .text       
-     CAN1_SendDemo                           FE83E5      3F      63       2   .text       
-     CAN1_GetToSend                          FE8424      18      24       2   .text       
+     CAN1_GetMsg                             FE8317      EA     234       5   .text       
+     CAN1_SendDemo                           FE8401      3F      63       2   .text       
+     CAN1_GetToSend                          FE8440      1E      30       2   .text       
      CAN_receive                               C080       5       5       1   NON_BANKED  
      PIT0                                      C085       9       9       1   NON_BANKED  
 - VARIABLES:
@@ -1582,7 +1582,7 @@ MODULE:                 -- CAN.c.o --
      CANCTL1                                   2151       2       2       4   .common     
      CANBTR0                                   2153       2       2       3   .common     
      CANBTR1                                   2155       2       2       4   .common     
-     CANRFLG                                   2157       2       2       1   .common     
+     CANRFLG                                   2157       2       2       2   .common     
      CANRIER                                   2159       2       2       1   .common     
      CANTBSEL                                  215B       2       2       2   .common     
      CANTFLG                                   215D       2       2       3   .common     
@@ -1598,12 +1598,12 @@ MODULE:                 -- CAN.c.o --
      CANIDMR5                                  2171       2       2       2   .common     
      CANIDMR6                                  2173       2       2       2   .common     
      CANIDMR7                                  2175       2       2       2   .common     
-     CANRXIDR0                                 2177       2       2       1   .common     
-     CANRXIDR1                                 2179       2       2       1   .common     
-     CANRXIDR2                                 217B       2       2       1   .common     
-     CANRXIDR3                                 217D       2       2       1   .common     
-     CANRXDSR0                                 217F       2       2       1   .common     
-     CANRXDLR                                  2181       2       2       1   .common     
+     CANRXIDR0                                 2177       2       2       3   .common     
+     CANRXIDR1                                 2179       2       2       6   .common     
+     CANRXIDR2                                 217B       2       2       2   .common     
+     CANRXIDR3                                 217D       2       2       3   .common     
+     CANRXDSR0                                 217F       2       2       2   .common     
+     CANRXDLR                                  2181       2       2       2   .common     
      CANTXDSR0                                 2183       2       2       2   .common     
      CANTXDLR                                  2185       2       2       2   .common     
      CANTXTBPR                                 2187       2       2       2   .common     
@@ -1613,19 +1613,19 @@ MODULE:                 -- CAN_Cfg.c.o --
      CAN_Msg1Type                              2100      12      18       1   .data       
      CAN_Msg2Type                              2112      12      18       1   .data       
      CAN_Msg3Type                              2124      12      18       1   .data       
-     CAN1_HwCfgType                            2136       5       5       5   .data       
+     CAN1_HwCfgType                            2136       5       5       6   .data       
 MODULE:                 -- ECT.c.o --
 - PROCEDURES:
-     ECT_Init                                FE843C      24      36       2   .text       
+     ECT_Init                                FE845E      24      36       2   .text       
 - VARIABLES:
 MODULE:                 -- PIT.c.o --
 - PROCEDURES:
-     PIT_Init                                FE8460       5       5       2   .text       
-     PIT0_Init                               FE8465      1F      31       2   .text       
+     PIT_Init                                FE8482       5       5       2   .text       
+     PIT0_Init                               FE8487      1F      31       2   .text       
 - VARIABLES:
 MODULE:                 -- PLL.c.o --
 - PROCEDURES:
-     PLL_Init                                FE8484      1D      29       2   .text       
+     PLL_Init                                FE84A6      1D      29       2   .text       
 - VARIABLES:
 
 *********************************************************************************************
@@ -1636,7 +1636,7 @@ MODULE STATISTIC
   main.c.o                                     0     41      0
   Start12.c.o                                  0     56      0
   rtshc12.c.o (ansixbi.lib)                    0     47      0
-  CAN.c.o                                     78   1016      4
+  CAN.c.o                                     78   1050      4
   CAN_Cfg.c.o                                 59      0      0
   ECT.c.o                                      0     36      0
   PIT.c.o                                      0     36      0
@@ -3433,7 +3433,7 @@ OBJECT LIST SORTED BY ADDRESS
      _CAN1CTL1                                  181       1       1       0   .abs_section_181
      _CAN1BTR0                                  182       1       1       0   .abs_section_182
      _CAN1BTR1                                  183       1       1       0   .abs_section_183
-     _CAN1RFLG                                  184       1       1       1   .abs_section_184
+     _CAN1RFLG                                  184       1       1       0   .abs_section_184
      _CAN1RIER                                  185       1       1       1   .abs_section_185
      _CAN1TFLG                                  186       1       1       0   .abs_section_186
      _CAN1TIER                                  187       1       1       0   .abs_section_187
@@ -3460,11 +3460,11 @@ OBJECT LIST SORTED BY ADDRESS
      _CAN1IDMR5                                 19D       1       1       0   .abs_section_19d
      _CAN1IDMR6                                 19E       1       1       0   .abs_section_19e
      _CAN1IDMR7                                 19F       1       1       0   .abs_section_19f
-     _CAN1RXIDR0                                1A0       1       1       2   .abs_section_1a0
-     _CAN1RXIDR1                                1A1       1       1       5   .abs_section_1a1
-     _CAN1RXIDR2                                1A2       1       1       1   .abs_section_1a2
-     _CAN1RXIDR3                                1A3       1       1       2   .abs_section_1a3
-     _CAN1RXDSR0                                1A4       1       1       1   .abs_section_1a4
+     _CAN1RXIDR0                                1A0       1       1       0   .abs_section_1a0
+     _CAN1RXIDR1                                1A1       1       1       0   .abs_section_1a1
+     _CAN1RXIDR2                                1A2       1       1       0   .abs_section_1a2
+     _CAN1RXIDR3                                1A3       1       1       0   .abs_section_1a3
+     _CAN1RXDSR0                                1A4       1       1       0   .abs_section_1a4
      _CAN1RXDSR1                                1A5       1       1       0   .abs_section_1a5
      _CAN1RXDSR2                                1A6       1       1       0   .abs_section_1a6
      _CAN1RXDSR3                                1A7       1       1       0   .abs_section_1a7
@@ -3472,7 +3472,7 @@ OBJECT LIST SORTED BY ADDRESS
      _CAN1RXDSR5                                1A9       1       1       0   .abs_section_1a9
      _CAN1RXDSR6                                1AA       1       1       0   .abs_section_1aa
      _CAN1RXDSR7                                1AB       1       1       0   .abs_section_1ab
-     _CAN1RXDLR                                 1AC       1       1       1   .abs_section_1ac
+     _CAN1RXDLR                                 1AC       1       1       0   .abs_section_1ac
      _CAN1RXTSR                                 1AE       2       2       0   .abs_section_1ae
      _CAN1TXIDR0                                1B0       1       1       0   .abs_section_1b0
      _CAN1TXIDR1                                1B1       1       1       0   .abs_section_1b1
@@ -3888,14 +3888,14 @@ OBJECT LIST SORTED BY ADDRESS
      CAN_Msg1Type                              2100      12      18       1   .data       
      CAN_Msg2Type                              2112      12      18       1   .data       
      CAN_Msg3Type                              2124      12      18       1   .data       
-     CAN1_HwCfgType                            2136       5       5       5   .data       
+     CAN1_HwCfgType                            2136       5       5       6   .data       
      CAN_Time                                  213B       2       2       3   .bss        
      CAN1_GetBufType                           213D      12      18       2   .common     
      CANCTL0                                   214F       2       2       4   .common     
      CANCTL1                                   2151       2       2       4   .common     
      CANBTR0                                   2153       2       2       3   .common     
      CANBTR1                                   2155       2       2       4   .common     
-     CANRFLG                                   2157       2       2       1   .common     
+     CANRFLG                                   2157       2       2       2   .common     
      CANRIER                                   2159       2       2       1   .common     
      CANTBSEL                                  215B       2       2       2   .common     
      CANTFLG                                   215D       2       2       3   .common     
@@ -3911,12 +3911,12 @@ OBJECT LIST SORTED BY ADDRESS
      CANIDMR5                                  2171       2       2       2   .common     
      CANIDMR6                                  2173       2       2       2   .common     
      CANIDMR7                                  2175       2       2       2   .common     
-     CANRXIDR0                                 2177       2       2       1   .common     
-     CANRXIDR1                                 2179       2       2       1   .common     
-     CANRXIDR2                                 217B       2       2       1   .common     
-     CANRXIDR3                                 217D       2       2       1   .common     
-     CANRXDSR0                                 217F       2       2       1   .common     
-     CANRXDLR                                  2181       2       2       1   .common     
+     CANRXIDR0                                 2177       2       2       3   .common     
+     CANRXIDR1                                 2179       2       2       6   .common     
+     CANRXIDR2                                 217B       2       2       2   .common     
+     CANRXIDR3                                 217D       2       2       3   .common     
+     CANRXDSR0                                 217F       2       2       2   .common     
+     CANRXDLR                                  2181       2       2       2   .common     
      CANTXDSR0                                 2183       2       2       2   .common     
      CANTXDLR                                  2185       2       2       2   .common     
      CANTXTBPR                                 2187       2       2       2   .common     
@@ -3930,17 +3930,17 @@ OBJECT LIST SORTED BY ADDRESS
      _Vector_42                                FFAA       2       2       0   .abs_section_ffaa
      main                                    FE8000      29      41       2   .text       
      Init                                    FE8029      29      41       2   .text       
-     CAN_RegAdd_Cfg                          FE8052      D3     211       4   .text       
+     CAN_RegAdd_Cfg                          FE8052      D3     211       6   .text       
      CAN_Init                                FE8125       8       8       2   .text       
      CAN1_Init                               FE812D      FA     250       6   .text       
      CAN1_SendMsg                            FE8227      F0     240       9   .text       
-     CAN1_GetMsg                             FE8317      CE     206       4   .text       
-     CAN1_SendDemo                           FE83E5      3F      63       2   .text       
-     CAN1_GetToSend                          FE8424      18      24       2   .text       
-     ECT_Init                                FE843C      24      36       2   .text       
-     PIT_Init                                FE8460       5       5       2   .text       
-     PIT0_Init                               FE8465      1F      31       2   .text       
-     PLL_Init                                FE8484      1D      29       2   .text       
+     CAN1_GetMsg                             FE8317      EA     234       5   .text       
+     CAN1_SendDemo                           FE8401      3F      63       2   .text       
+     CAN1_GetToSend                          FE8440      1E      30       2   .text       
+     ECT_Init                                FE845E      24      36       2   .text       
+     PIT_Init                                FE8482       5       5       2   .text       
+     PIT0_Init                               FE8487      1F      31       2   .text       
+     PLL_Init                                FE84A6      1D      29       2   .text       
 
 *********************************************************************************************
 UNUSED-OBJECTS SECTION
@@ -4032,11 +4032,11 @@ CAN1_Init                 USES CAN_RegAdd_Cfg CANCTL0 CANCTL1 CAN1_Init
 CAN1_SendMsg              USES CAN_RegAdd_Cfg CANTFLG CANTBSEL _CAN1TBSEL 
                                 CANTXIDR0 CAN1_SendMsg _LSHRU CANTXIDR1 CANTXIDR2 
                                 CANTXIDR3 CANTXDSR0 CANTXDLR CANTXTBPR 
-CAN1_GetMsg               USES _CAN1RXIDR1 _CAN1RXIDR0 _LSHL CAN1_GetMsg 
-                                _CAN1RXIDR2 _CAN1RXIDR3 _CAN1RXDLR _CAN1RXDSR0 _CAN1RFLG 
+CAN1_GetMsg               USES CAN_RegAdd_Cfg CANRXIDR1 CANRXIDR0 _LSHL 
+                                CAN1_GetMsg CANRXIDR2 CANRXIDR3 CANRXDLR CANRXDSR0 CANRFLG 
 CAN1_SendDemo             USES CAN_Time CAN1_HwCfgType CAN_Msg1Type 
                                 CAN_Msg2Type CAN1_SendMsg CAN_Msg3Type 
-CAN1_GetToSend            USES CAN1_GetBufType CAN1_GetMsg CAN1_HwCfgType 
+CAN1_GetToSend            USES CAN1_HwCfgType CAN1_GetBufType CAN1_GetMsg 
                                 CAN1_SendMsg 
 ECT_Init                  USES _ECT_TSCR1 _ECT_TIOS _ECT_TCTL1 _ECT_TCTL2 
                                 _ECT_DLYCT _ECT_ICOVW _ECT_ICSYS _ECT_TIE _ECT_TSCR2 
@@ -4083,6 +4083,8 @@ DEPENDENCY TREE
        | 
        +- CAN1_GetMsg         
        |  | 
+       |  +- CAN_RegAdd_Cfg       (see above)
+       |  |  
        |  +- _LSHL               
        |       
        +- CAN1_SendMsg        
@@ -4106,5 +4108,5 @@ STATISTIC SECTION
 ExeFile:
 --------
 Number of blocks to be downloaded: 8
-Total size of all blocks to be downloaded: 1395
+Total size of all blocks to be downloaded: 1429
 

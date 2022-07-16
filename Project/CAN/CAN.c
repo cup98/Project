@@ -244,26 +244,27 @@ int CAN1_SendMsg(CAN_ConfigType *CAN_Cfg,CAN_MsgType *CAN_Msg)
 }
 
 //CAN1接收
-int CAN1_GetMsg(CAN_MsgType *CAN_Msg)
+int CAN1_GetMsg(CAN_ConfigType *CAN_Cfg,CAN_MsgType *CAN_Msg)
 {
   	unsigned char sp;										  //设置接收数据位数
     int Reflag;
-
-  	if (!(CAN1RFLG_RXF))									  //�测接收标�
+    CAN_RegAdd_Cfg(CAN_Cfg->Channel);
+    
+  	if (!((*CANRFLG) & 0x01))									  //�测接收标�
   	{
   		Reflag = 0;
   	}
 
-  	if ((CAN1RXIDR1 & 0x08) == 0x08)                         			  //判断是否为标准帧
+  	if (((*CANRXIDR1) & 0x08) == 0x08)                         			  //判断是否为标准帧
   	{
-        CAN_Msg->ID = ((unsigned long)(CAN1RXIDR0 & 0xff)) << 21;
-  	    CAN_Msg->ID = CAN_Msg->ID | (((unsigned long)(CAN1RXIDR1 & 0xe0)) << 13);
-	    CAN_Msg->ID = CAN_Msg->ID | (((unsigned long)(CAN1RXIDR1 & 0x07)) << 15);
-	    CAN_Msg->ID = CAN_Msg->ID | (((unsigned long)(CAN1RXIDR2 & 0xff)) << 7);
-	    CAN_Msg->ID = CAN_Msg->ID | (((unsigned long)(CAN1RXIDR3 & 0xfe)) >> 1);
-        CAN_Msg->IDE = 1;
+      CAN_Msg->ID = ((unsigned long)((*CANRXIDR0) & 0xFF)) << 21;
+  	  CAN_Msg->ID = CAN_Msg->ID | (((unsigned long)((*CANRXIDR1) & 0xE0)) << 13);
+	    CAN_Msg->ID = CAN_Msg->ID | (((unsigned long)((*CANRXIDR1) & 0x07)) << 15);
+	    CAN_Msg->ID = CAN_Msg->ID | (((unsigned long)((*CANRXIDR2) & 0xFF)) << 7);
+	    CAN_Msg->ID = CAN_Msg->ID | (((unsigned long)((*CANRXIDR3) & 0xFE)) >> 1);
+      CAN_Msg->IDE = 1;
 
-        if (CAN1RXIDR3 & 0x01)                         			  //判断是否为远程帧
+      if ((*CANRXIDR3) & 0x01)                         			  //判断是否为远程帧
   		{
   	  		CAN_Msg->RTR = 1;
   		}
@@ -274,10 +275,10 @@ int CAN1_GetMsg(CAN_MsgType *CAN_Msg)
   	}
   	else
   	{
-  	  	CAN_Msg->ID  = (unsigned long)(CAN1RXIDR0 << 3) | //读出接收帧ID�8�
-            	  	   (unsigned long)(CAN1RXIDR1 >> 5) ; //并且与上读出接收帧ID�3�
+  	  	CAN_Msg->ID  = (unsigned long)((*CANRXIDR0) << 3) | //读出接收帧ID�8�
+            	  	   (unsigned long)((*CANRXIDR1) >> 5) ; //并且与上读出接收帧ID�3�
         CAN_Msg->IDE = 0;
-        if (CAN1RXIDR1 & 0x10)                         			  //判断是否为远程帧
+        if ((*CANRXIDR1) & 0x10)                         			  //判断是否为远程帧
   		{
   	  		CAN_Msg->RTR = 1;
   		}
@@ -287,14 +288,14 @@ int CAN1_GetMsg(CAN_MsgType *CAN_Msg)
  		}
  	}
 
-  	CAN_Msg->Len = CAN1RXDLR;						  //读出接收的数据长�
+  	CAN_Msg->Len = *CANRXDLR;						  //读出接收的数据长�
 
   	for (sp = 0; sp < CAN_Msg->Len; sp++)			  //依次读出接收的每�位数�
   	{
-  		CAN_Msg->Data[sp] = *((&CAN1RXDSR0) + sp);
+  		CAN_Msg->Data[sp] = *(CANRXDSR0 + sp);
   	}
 
-  	CAN1RFLG |= 1;											  //清RXF标志�(缓冲器准备接�)
+  	*CANRFLG |= 1;											  //清RXF标志�(缓冲器准备接�)
 
     Reflag = 1;
   	return Reflag;
@@ -332,10 +333,11 @@ void CAN1_SendDemo(void)
 
 void CAN1_GetToSend(void)									  //读出接受到的数据再发送出�
 {
-  	if (CAN1_GetMsg(&CAN1_GetBufType) == 1)
+  	if (CAN1_GetMsg(&CAN1_HwCfgType,&CAN1_GetBufType) == 1)
   	{
       	if(CAN1_SendMsg(&CAN1_HwCfgType,&CAN1_GetBufType) == 1)
       	{
+      	  //break;
       	}
   	}
 }
